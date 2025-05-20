@@ -7,7 +7,11 @@ from resources.models import Project
 class User(AbstractUser):
     age = models.PositiveIntegerField(default=15)
     can_be_contacted = models.BooleanField(default=True)
-    can_data_be_shared = models.BooleanField(default=True)  
+    can_data_be_shared = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.username
+        
 
 
 class Contributor(models.Model):
