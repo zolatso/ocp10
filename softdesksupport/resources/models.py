@@ -19,5 +19,4 @@ class Project(models.Model):
         related_name="authored_projects"
     )
     time_created = models.DateField(auto_now_add=True)
-
     

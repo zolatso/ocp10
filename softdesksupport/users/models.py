@@ -25,6 +25,9 @@ class Contributor(models.Model):
     )
     date_joined = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user} contributed to project {self.project}"
+
     class Meta:
         unique_together = (
             "user",
