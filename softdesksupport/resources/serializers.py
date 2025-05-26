@@ -5,4 +5,5 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id','title','description','type','author','time_created']
+        fields = ['id','title','description','type','time_created']
+    

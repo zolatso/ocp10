@@ -1,22 +1,18 @@
 from users.models import User, Contributor
 from users.serializers import UserSerializer, ContributorSerializer
 from rest_framework import viewsets
-#from snippets.permissions import IsOwnerOrReadOnly
-##from rest_framework.decorators import api_view, action
-# from rest_framework.response import Response
-# from rest_framework.reverse import reverse
-# from rest_framework import renderers
-
-# from rest_framework.response import Response
-# from rest_framework import permissions
-# from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from users.permissions import IsStaffUser
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     This viewset automatically provides `list` and `retrieve` actions.
+    Only users with staff status can look at the list of users.
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsStaffUser]
+
 
 class ContributorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Contributor.objects.all()
