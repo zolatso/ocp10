@@ -2,6 +2,7 @@ from rest_framework import serializers
 from resources.models import Project, Issue, Comment
 
 class ProjectSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Project
         fields = ['id','title','description','type','time_created']
