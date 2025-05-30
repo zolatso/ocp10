@@ -18,7 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, ContributorViewSet
-from resources.views import ProjectViewSet
+from resources.views import (
+    ProjectViewSet,
+    IssueViewSet,
+    CommentViewSet
+)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -30,6 +34,8 @@ router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'contributors', ContributorViewSet, basename='contributors')
 router.register(r'projects', ProjectViewSet, basename='projects')
+router.register(r'issues', IssueViewSet, basename='issues')
+router.register(r'comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

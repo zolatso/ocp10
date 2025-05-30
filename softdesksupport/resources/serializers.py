@@ -10,9 +10,24 @@ class ProjectSerializer(serializers.ModelSerializer):
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        fields = ['id',]
+        fields = ['id','project','title','description','assigned_to','priority','issue_type','progress']
+    
+    def validate_project(self, project):
+        """
+        Check that the current user is a contributor to the specified project.
+        """
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            if not project.contributors.filter(user=request.user).exists():
+                raise serializers.ValidationError(
+                    "You must be a contributor to this project to create an issue for it."
+                )
+        return project
 
     def validate(self, data):
+        """
+        Check that the assigned user is a contributor to the specified project.
+        """
         assigned_to_user = data.get('assigned_to')
         project = data.get('project')
 
@@ -27,6 +42,18 @@ class IssueSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = []
+        fields = ['id','issue','description','time_created']
+
+    def validate_issue(self, issue):
+        """
+        Check that the current user is a contributor to the specified project.
+        """
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            if not issue.project.contributors.filter(user=request.user).exists():
+                raise serializers.ValidationError(
+                    "You must be a contributor to this project to create a comment for it."
+                )
+        return issue
 
     

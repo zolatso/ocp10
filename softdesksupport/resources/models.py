@@ -21,6 +21,9 @@ class Project(models.Model):
         related_name="authored_projects"
     )
     time_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
     
 
 class Issue(models.Model):
@@ -51,7 +54,9 @@ class Issue(models.Model):
     assigned_to = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
-        related_name="assigned_issues"
+        related_name="assigned_issues",
+        blank=True,
+        null=True
     )
     priority = models.IntegerField(
         choices=Priority.choices,
@@ -59,7 +64,7 @@ class Issue(models.Model):
     issue_type = models.IntegerField(
         choices=IssueType.choices,
         default=IssueType.TASK)
-    issue_type = models.IntegerField(
+    progress = models.IntegerField(
         choices=Progress.choices,
         default=Progress.TO_DO)
     time_created = models.DateField(auto_now_add=True)
@@ -82,3 +87,6 @@ class Comment(models.Model):
     )
     description = models.TextField(max_length=2048, blank=False)
     time_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
