@@ -5,7 +5,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id','title','description','type','time_created']
+        fields = ['id','title','description','type','time_created','contributors']
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -31,9 +31,9 @@ class IssueSerializer(serializers.ModelSerializer):
         """
         assigned_to_user = data.get('assigned_to')
         project = data.get('project')
-
+        
         if assigned_to_user and project:
-            if not project.contributors.filter(pk=assigned_to_user.pk).exists():
+            if not project.contributors.filter(user=assigned_to_user).exists():
                 raise serializers.ValidationError(
                     {'assigned_to': "The assigned user must be a contributor to this project."}
                 )
