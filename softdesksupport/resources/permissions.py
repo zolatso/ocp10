@@ -21,7 +21,7 @@ class AuthorModifyContributorReadOnly(BasePermission):
             project = obj
 
 
-        user_ids = obj.contributors.values_list('user', flat=True)
+        user_ids = project.contributors.values_list('user', flat=True)
         if request.method in SAFE_METHODS:
             return request.user.id in user_ids 
 
