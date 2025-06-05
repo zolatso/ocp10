@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from resources import views
 
 # The API URLs are now determined automatically by the router.

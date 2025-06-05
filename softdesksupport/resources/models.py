@@ -2,7 +2,6 @@ import uuid
 from django.db import models
 from django.conf import settings
 
-
 class Project(models.Model):
     TYPE_CHOICES = [
         ("back-end", "back-end"),

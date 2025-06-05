@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from users.models import User
+from users.models import User, Contributor
+from resources.models import Project
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,3 +23,31 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+
+class ContributorSerializer(serializers.ModelSerializer):
+    # 'user' is read-only because it will be automatically set to request.user
+    # during creation. Clients should not provide a user ID for this field.
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+
+    class Meta:
+        model = Contributor
+        fields = ['id', 'user', 'project', 'date_joined']
+        read_only_fields = ['date_joined'] # This field is auto_now_add
+
+    def validate(self, data):
+        """
+        Custom validation to ensure the authenticated user is not already
+        a contributor to the specified project.
+        """
+        # The request object is available in serializer context
+        request_user = self.context['request'].user
+        project = data['project']
+
+        # Check if a Contributor instance already exists for this user and project
+        if Contributor.objects.filter(user=request_user, project=project).exists():
+            raise serializers.ValidationError(
+                {"detail": "You are already a contributor to this project."}
+            )
+        return data

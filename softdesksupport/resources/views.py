@@ -32,6 +32,12 @@ class IssueViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
     
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Issue.objects.all()
+        return Issue.objects.filter(project__contributors__user=user)
+    
     
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
@@ -41,3 +47,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Comment.objects.all()
+        return Comment.objects.filter(issue__project__contributors__user=user)

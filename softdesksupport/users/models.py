@@ -16,12 +16,10 @@ class User(AbstractUser):
 
 class Contributor(models.Model):
     user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="contributing"
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contributing'
     )
     project = models.ForeignKey(
-        to=Project,
-        on_delete=models.CASCADE,
-        related_name="contributors",
+        to=Project, on_delete=models.CASCADE, related_name='contributors'
     )
     date_joined = models.DateField(auto_now_add=True)
 
